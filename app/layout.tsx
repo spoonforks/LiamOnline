@@ -13,17 +13,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://game-of-life-background-lab.gavin-liam-b-3363.chatgpt.site'),
   title: 'Game of Life — Background Lab',
   description: 'An interactive Conway’s Game of Life background experiment.',
   openGraph: {
     title: 'Game of Life — Background Lab',
     description: 'An interactive Conway’s Game of Life background experiment.',
     type: 'website',
+    images: [{ url: '/og.png', width: 1792, height: 1024, alt: 'Game of Life — Background Lab' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Game of Life — Background Lab',
     description: 'An interactive Conway’s Game of Life background experiment.',
+    images: ['/og.png'],
   },
 };
 
