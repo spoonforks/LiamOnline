@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liam Cunningham — Version 2</title>
+    <link rel="stylesheet" href="./vendor/animate.min.css" />
+    <style>
+      @font-face {
+        font-family: 'League Spartan';
+        src: url('./fonts/league-spartan-latin.woff2') format('woff2');
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+      }
+
+      :root {
+        color-scheme: dark;
+        background: #43424a;
+      }
+
+      * { box-sizing: border-box; }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #43424a;
+        color: #ffffff;
+        font-family: 'League Spartan', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: geometricPrecision;
+      }
+
+      canvas {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        display: block;
+        cursor: crosshair;
+        touch-action: none;
+      }
+
+      .home-layout {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .home-content {
+        position: absolute;
+        top: 20vh;
+        right: 5.2vw;
+        left: 5.2vw;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: stretch;
+      }
+
+      .identity {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .portrait-frame {
+        position: relative;
+        width: clamp(254px, 17.26vw, 352px);
+        aspect-ratio: 0.926 / 1;
+        margin-left: 12px;
+        overflow: hidden;
+      }
+
+      .portrait {
+        position: absolute;
+        top: -13.12%;
+        left: -1.35%;
+        width: 122.25%;
+        height: auto;
+        display: block;
+      }
+
+      .name,
+      .subtitle {
+        margin: 0;
+        font-weight: 400;
+      }
+
+      .name {
+        margin-top: 3.15vh;
+        font-size: clamp(62px, 5.22vw, 102px);
+        line-height: 0.92;
+        letter-spacing: -0.025em;
+        white-space: nowrap;
+      }
+
+      .degree {
+        margin-top: 2.45vh;
+        font-size: clamp(32px, 2.42vw, 47px);
+        line-height: 1;
+      }
+
+      .focus {
+        margin-top: 2.65vh;
+        font-size: clamp(28px, 2.12vw, 41px);
+        line-height: 1;
+      }
+
+      .section-list {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+        align-self: stretch;
+        margin: 1vh 0 0;
+        font-size: clamp(42px, 3.2vw, 62px);
+        font-weight: 400;
+        line-height: 1;
+        text-align: right;
+      }
+
+      .nav-label {
+        display: inline-block;
+        pointer-events: auto;
+        cursor: default;
+        transform-origin: center;
+        --animate-duration: 800ms;
+      }
+
+      @media (max-width: 820px) {
+        .home-content {
+          inset: 0;
+          display: block;
+        }
+
+        .section-list {
+          position: absolute;
+          top: 5vh;
+          right: 6vw;
+          bottom: auto;
+          left: 6vw;
+          flex-direction: row;
+          align-items: center;
+          gap: 18px;
+          margin: 0;
+          font-size: clamp(22px, 5vw, 34px);
+        }
+
+        .identity {
+          position: absolute;
+          top: 16vh;
+          left: 6vw;
+        }
+
+        .portrait-frame {
+          width: clamp(229px, 52.35vw, 319px);
+        }
+
+        .name {
+          font-size: clamp(48px, 12vw, 72px);
+          white-space: normal;
+        }
+
+        .degree {
+          font-size: clamp(27px, 7vw, 38px);
+        }
+
+        .focus {
+          font-size: clamp(23px, 5.8vw, 32px);
+        }
+      }
+
+      @media (max-height: 760px) and (min-width: 821px) {
+        .home-content {
+          top: 14vh;
+        }
+
+        .portrait-frame {
+          width: min(17.26vw, 286px);
+        }
+
+        .section-list {
+          margin-top: 1vh;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="./version-2-pages.css" />
+  </head>
+  <body>
+    <canvas
+      id="life"
+      aria-label="Conway's Game of Life. Move the cursor to generate new cells."
+    ></canvas>
+
+    <main class="home-layout site-shell" aria-label="Liam Cunningham portfolio">
+      <div class="page-stage">
+        <section class="page-view home-view is-active" data-page="home" data-page-index="0" aria-labelledby="name">
+          <div class="home-content">
+            <div class="identity">
+              <div class="portrait-frame">
+                <img
+                  class="portrait"
+                  src="./pf_blur.webp"
+                  alt="Portrait of Liam Cunningham"
+                  draggable="false"
+                />
+              </div>
+              <h1 class="name" id="name">Liam Cunningham</h1>
+              <p class="subtitle degree">MSc. Student</p>
+              <p class="subtitle focus">AI &amp; Metropolitan Innovation</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-view about-view is-below" data-page="about" data-page-index="1" aria-labelledby="about-title">
+          <h2 class="sr-only" id="about-title">About Liam Cunningham</h2>
+          <div class="about-grid">
+            <div class="about-card about-profile-card">
+              <div class="portrait-frame about-portrait-frame">
+                <img
+                  class="portrait"
+                  src="./pf_blur.webp"
+                  alt="Portrait of Liam Cunningham"
+                  draggable="false"
+                />
+              </div>
+
+              <ul class="about-details">
+                <li class="about-detail">Liam Cunningham</li>
+                <li class="about-detail">Amsterdam</li>
+                <li class="about-detail"><a class="about-link" href="mailto:liam.cunningham525@gmail.com">liam.cunningham525@gmail.com</a></li>
+                <li class="about-detail"><a class="about-link" href="tel:+31682229875">+31 682229875</a></li>
+                <li class="about-detail"><a class="about-link" href="https://www.linkedin.com/in/liam-cunningham8/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                <li class="about-detail"><a class="about-link" href="https://github.com/spoonforks" target="_blank" rel="noopener noreferrer">Github</a></li>
+              </ul>
+            </div>
+
+            <article class="about-card about-story-card">
+              <p>Hey, my name is Liam - Nice to meet you,</p>
+              <p>Growing up as a child of the internet I've always been fascinated with technology and the possibilities that it enables. Following this curiosity eventually brought me to study AI at the Vrije Universiteit. While gaining technical knowledge of AI systems, I became increasingly interested in the social aspect of how humans interact with technology.</p>
+              <p>This started raising questions for me such as:</p>
+              <p>How can AI actually make a positive impact on people's day to day lives?</p>
+              <p>How can AI help promote responsibility and ethics rather than hindering it?</p>
+              <p>and How can we create computational representations of an inherently complex and unpredictable world?</p>
+              <p>As luck would have it, I'm living in a city that strives to pursue these same questions, Amsterdam. Along side other interests, my desire for interdisciplinary collaboration brought me to pursue my master's degree in Metropolitan Analysis Design and Engineering (MADE), a joint degree between Wageningen University and TU Delft.</p>
+              <p>And this, my dear reader, brings my story to the present..</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="page-view education-view is-below" data-page="education" data-page-index="2" aria-labelledby="education-title">
+          <h2 class="sr-only" id="education-title">Education</h2>
+          <div class="education-bounds">
+            <div class="education-component">
+              <img
+                class="education-map"
+                src="./educationTransport-v2.png"
+                alt="A playful transit map representing Liam Cunningham's education journey."
+                draggable="false"
+              />
+
+              <article class="education-card education-card-bsc" aria-labelledby="bsc-title">
+                <h3 id="bsc-title">Bsc. Artificial Intelligence</h3>
+                <p>Vrije Universiteit Amsterdam</p>
+                <p>Minor in Managing Digital Innovation</p>
+                <p>2021 - 2025</p>
+              </article>
+
+              <article class="education-card education-card-msc" aria-labelledby="msc-title">
+                <h3 id="msc-title">Msc. Metropolitan Analysis Design and Engineering (MADE)</h3>
+                <p>Wageningen University &amp; TU Delft (Joint Degree)</p>
+                <p>@ AMS Institute - Amsterdam</p>
+                <p>2025 - Present (Expected 2027)</p>
+              </article>
+
+              <article class="education-card education-card-ib" aria-labelledby="ib-title">
+                <h3 id="ib-title">International Baccalaureate (IB) Diploma</h3>
+                <p>Malmö Borgarskola - Malmö</p>
+                <p>High School Diploma</p>
+                <p>2017 - 2020</p>
+              </article>
+
+              <svg class="metro-simulation" viewBox="0 0 2048 1152" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <filter id="route-purple" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="0.2118 0 0 0 0  0 0 0 0 0  0 0 0.6 0 0  0 0 0 1 0" />
+                  </filter>
+                  <filter id="route-green" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0.8 0 0 0  0 0 0.3333 0 0  0 0 0 1 0" />
+                  </filter>
+                  <filter id="route-dashed-blue" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0.4941 0 0 0  0 0 0.8 0 0  0 0 0 1 0" />
+                  </filter>
+                  <filter id="route-yellow" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 0.9804 0 0 0  0 0 0.4 0 0  0 0 0 1 0" />
+                  </filter>
+                  <filter id="route-olive" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="0.6 0 0 0 0  0 0.5804 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+                  </filter>
+                  <filter id="route-royal-blue" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="0.1686 0 0 0 0  0 0.2275 0 0 0  0 0 0.902 0 0  0 0 0 1 0" />
+                  </filter>
+                  <filter id="route-orange" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 0.6902 0 0 0  0 0 0.4 0 0  0 0 0 1 0" />
+                  </filter>
+                  <filter id="route-teal" color-interpolation-filters="sRGB">
+                    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0.4 0 0 0  0 0 0.3608 0 0  0 0 0 1 0" />
+                  </filter>
+                </defs>
+
+                <g class="metro metro-purple">
+                  <image href="./assets/metro-sprite-v2.png" x="-9" y="-60" width="18" height="120" transform="rotate(90)" filter="url(#route-purple)" />
+                  <animateMotion
+                    dur="40s"
+                    begin="-7s"
+                    repeatCount="indefinite"
+                    rotate="auto"
+                    calcMode="linear"
+                    keyPoints="0;1;0"
+                    keyTimes="0;0.5;1"
+                    path="M 288 240 L 288 278 Q 288 290 297 299 L 319 321 Q 325 330 337 330 L 903 330 Q 914 330 922 322 L 949 295 Q 958 286 958 274 L 958 247 Q 958 239 964 233 L 1038 159 Q 1045 152 1055 152 L 1215 152 Q 1225 152 1232 159 L 1259 190 Q 1267 198 1278 198 L 1535 198"
+                  />
+                </g>
+
+                <g class="metro metro-green">
+                  <image href="./assets/metro-sprite-v2.png" x="-9" y="-60" width="18" height="120" transform="rotate(90)" filter="url(#route-green)" />
+                  <animateMotion
+                    dur="14s"
+                    begin="-1s"
+                    repeatCount="indefinite"
+                    rotate="auto"
+                    calcMode="linear"
+                    keyPoints="0;1;0"
+                    keyTimes="0;0.5;1"
+                    path="M 690 198 L 768 198 Q 779 198 787 206 L 865 278 Q 873 286 884 286 L 938 286"
+                  />
+                </g>
+
+                <g class="metro metro-dashed-blue">
+                  <image href="./assets/metro-sprite-v2.png" x="-9" y="-60" width="18" height="120" transform="rotate(90)" filter="url(#route-dashed-blue)" />
+                  <animateMotion
+                    dur="18s"
+                    begin="-10s"
+                    repeatCount="indefinite"
+                    rotate="auto"
+                    calcMode="linear"
+                    keyPoints="0;1;0"
+                    keyTimes="0;0.5;1"
+                    path="M 333 350 L 333 631 Q 333 642 325 650 L 299 676 Q 293 682 288 665"
+                  />
+                </g>
+
+                <g class="metro metro-yellow">
+                  <image href="./assets/metro-sprite-v2.png" x="-9" y="-60" width="18" height="120" transform="rotate(90)" filter="url(#route-yellow)" />
+                  <animateMotion
+                    dur="16s"
+                    begin="-4s"
+                    data-sound-stops="0.302"
+                    repeatCount="indefinite"
+                    rotate="auto"
+                    path="M 308 695 L 458 695 Q 470 695 478 704 L 506 732 Q 514 740 514 752 L 514 853 Q 514 865 502 865 L 169 865 Q 157 865 157 853 L 157 742 Q 157 730 169 730 L 230 730 Q 242 730 242 718 L 242 707 Q 242 695 254 695 Z"
+                  />
+                </g>
+
+                <g class="metro metro-olive">
+                  <image href="./assets/metro-sprite-v2.png" x="-9" y="-60" width="18" height="120" transform="rotate(90)" filter="url(#route-olive)" />
+                  <animateMotion
+                    dur="24s"
+                    begin="-16s"
+                    repeatCount="indefinite"
+                    rotate="auto"
+                    calcMode="linear"
+                    keyPoints="0;1;0"
+                    keyTimes="0;0.5;1"
+                    path="M 970 305 L 970 456 Q 970 470 966 484 L 966 755 Q 966 767 954 767 L 657 767 Q 645 767 645 779 L 645 910"
+                  />
+                </g>
+
+                <g class="metro metro-royal-blue">
+                  <image href="./assets/metro-sprite-v2.png" x="-9" y="-60" width="18" height="120" transform="rotate(90)" filter="url(#route-royal-blue)" />
+                  <animateMotion
+                    dur="38s"
+                    begin="-28s"
+                    repeatCount="indefinite"
+                    rotate="auto"
+                    calcMode="linear"
+                    keyPoints="0;1;0"
+                    keyTimes="0;0.5;1"
+                    path="M 512 828 L 588 828 Q 600 828 600 816 L 600 795 Q 600 783 612 783 L 934 783 Q 946 783 946 771 L 946 620 Q 946 608 958 608 L 963 608 L 963 535 Q 963 522 975 518 L 998 512 L 1033 512 Q 1045 512 1045 524 L 1045 596 Q 1045 608 1057 608 L 1609 608 Q 1621 608 1621 596 L 1621 573"
+                  />
+                </g>
+
+                <g class="metro metro-orange">
+                  <image href="./assets/metro-sprite-v2.png" x="-9" y="-60" width="18" height="120" transform="rotate(90)" filter="url(#route-orange)" />
+                  <animateMotion
+                    dur="40s"
+                    begin="-5s"
+                    repeatCount="indefinite"
+                    rotate="auto"
+                    calcMode="linear"
+                    keyPoints="0;1;0"
+                    keyTimes="0;0.5;1"
+                    path="M 949 305 L 949 454 Q 949 471 957 488 Q 963 500 978 500 L 1033 500 Q 1045 500 1045 512 L 1045 576 Q 1045 588 1057 588 L 1608 588 Q 1620 588 1628 596 L 1659 627 Q 1667 635 1667 647 L 1667 674 Q 1667 686 1679 686 L 1747 686 Q 1759 686 1767 694 L 1898 825"
+                  />
+                </g>
+
+                <g class="metro metro-teal">
+                  <image href="./assets/metro-sprite-v2.png" x="-9" y="-60" width="18" height="120" transform="rotate(90)" filter="url(#route-teal)" />
+                  <animateMotion
+                    dur="22s"
+                    begin="-13s"
+                    repeatCount="indefinite"
+                    rotate="auto"
+                    calcMode="linear"
+                    keyPoints="0;1;0"
+                    keyTimes="0;0.5;1"
+                    path="M 1633 573 L 1633 590 Q 1633 602 1641 610 L 1671 640 Q 1679 648 1679 660 L 1679 852 Q 1679 864 1671 872 L 1540 1003"
+                  />
+                </g>
+              </svg>
+
+              <button
+                class="metro-sound-toggle is-enabled"
+                type="button"
+                aria-label="Mute metro sounds"
+                aria-pressed="true"
+                title="Mute metro sounds"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="sound-speaker" d="M11 5 6.5 9H3v6h3.5l4.5 4V5Z" />
+                  <path class="sound-wave sound-wave-inner" d="M15 8.5a5 5 0 0 1 0 7" />
+                  <path class="sound-wave sound-wave-outer" d="M18 5.5a9 9 0 0 1 0 13" />
+                  <path class="sound-muted-mark" d="m16 10 5 5m0-5-5 5" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-view portfolio-view is-below" data-page="portfolio" data-page-index="3" aria-labelledby="portfolio-title">
+          <h2 class="sr-only" id="portfolio-title">Portfolio</h2>
+          <div class="portfolio-gallery-shell">
+            <iframe
+              id="portfolio-gallery"
+              class="portfolio-gallery"
+              src="./gallery/academic-gallery.html"
+              title="Interactive academic portfolio gallery"
+              allow="fullscreen; pointer-lock"
+            ></iframe>
+          </div>
+        </section>
+
+        <section class="page-view placeholder-view is-below" data-page="tools" data-page-index="4" aria-labelledby="tools-title">
+          <div class="placeholder-card"><h2 id="tools-title">Tools</h2></div>
+        </section>
+      </div>
+
+      <nav class="section-list" aria-label="Portfolio sections">
+        <button class="nav-label" type="button" data-target-page="1">About</button>
+        <button class="nav-label" type="button" data-target-page="2">Education</button>
+        <button class="nav-label" type="button" data-target-page="3">Portfolio</button>
+        <button class="nav-label" type="button" data-target-page="4">Tools</button>
+      </nav>
+    </main>
+
+    <script>
+      (() => {
+        const SETTINGS = Object.freeze({
+          speed: 10,
+          cellSize: 16,
+          density: 15,
+          opacity: 19,
+          cursorOpacity: 55,
+          cursorFadeSteps: 16,
+          wrap: true,
+          gaps: true,
+          decay: true,
+          decaySteps: 16,
+          tileMode: 'intentional',
+        });
+
+        const TILE_FIRST = 6;
+        const TILE_COUNT = 13;
+        const canvas = document.querySelector('#life');
+        const context = canvas.getContext('2d', { alpha: true });
+        const siteShell = document.querySelector('.site-shell');
+        const pages = Array.from(document.querySelectorAll('.page-view'));
+        const navLabels = document.querySelectorAll('.nav-label');
+        const homeContent = document.querySelector('.home-view .home-content');
+        const homeIdentity = document.querySelector('.home-view .identity');
+        const metroSimulation = document.querySelector('.metro-simulation');
+        const metroSoundToggle = document.querySelector('.metro-sound-toggle');
+        const portfolioGallery = document.querySelector('#portfolio-gallery');
+        const portfolioGalleryShell = document.querySelector('.portfolio-gallery-shell');
+        const metroFrequencies = [329.63, 369.99, 415.3, 440, 493.88, 554.37, 622.25, 659.25];
+        const metroSoundEvents = Array.from(document.querySelectorAll('.metro animateMotion')).map((motion, index) => ({
+          begin: Number.parseFloat(motion.getAttribute('begin')) || 0,
+          duration: Number.parseFloat(motion.getAttribute('dur')) || 1,
+          frequency: metroFrequencies[index],
+          extraStopPhases: (motion.getAttribute('data-sound-stops') || '')
+            .split(',')
+            .map(Number)
+            .filter((phase) => Number.isFinite(phase) && phase > 0 && phase < 1),
+          pingPong: motion.hasAttribute('keyPoints'),
+          previousPhase: null,
+        }));
+
+        let grid = new Uint8Array();
+        let ages = new Uint16Array();
+        let tileKinds = new Uint8Array();
+        let intentionalKinds = new Uint8Array();
+        let cursorFadeLevels = new Uint8Array();
+        let decayLevels = new Uint8Array();
+        let decayTileKinds = new Uint8Array();
+        let decayOpacities = new Uint8Array();
+        let tileCache = [];
+        let columns = 0;
+        let rows = 0;
+        let population = 0;
+        let lastTick = 0;
+        let lastPointerCell = null;
+        let pointerDirty = false;
+        let activePageIndex = 0;
+        let transitionLocked = false;
+        let transitionTimer = 0;
+        let wheelAccumulator = 0;
+        let wheelResetTimer = 0;
+        let touchStartY = null;
+        let audioContext = null;
+        let metroMasterGain = null;
+        let metroSoundsEnabled = true;
+
+        const tileImages = Array.from({ length: TILE_COUNT }, (_, index) => {
+          const image = new Image();
+          image.src = `TILES/Sprite-${String(index + TILE_FIRST).padStart(4, '0')}.png`;
+          image.addEventListener('load', () => {
+            rebuildTileCache();
+            pointerDirty = true;
+          });
+          return image;
+        });
+
+        function setMetroSoundButtonState(enabled) {
+          metroSoundToggle.classList.toggle('is-enabled', enabled);
+          metroSoundToggle.setAttribute('aria-pressed', String(enabled));
+          metroSoundToggle.setAttribute('aria-label', enabled ? 'Mute metro sounds' : 'Enable metro sounds');
+          metroSoundToggle.title = enabled ? 'Mute metro sounds' : 'Enable metro sounds';
+        }
+
+        async function ensureMetroAudio() {
+          if (!audioContext) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) {
+              metroSoundToggle.disabled = true;
+              metroSoundToggle.title = 'Audio is not supported in this browser';
+              return false;
+            }
+            audioContext = new AudioContextClass();
+            metroMasterGain = audioContext.createGain();
+            metroMasterGain.gain.value = 1.25;
+            metroMasterGain.connect(audioContext.destination);
+          }
+
+          if (audioContext.state === 'suspended') await audioContext.resume();
+          return audioContext.state === 'running';
+        }
+
+        async function toggleMetroSounds() {
+          const nextState = !metroSoundsEnabled;
+          if (nextState && !(await ensureMetroAudio())) return;
+          metroSoundsEnabled = nextState;
+          setMetroSoundButtonState(metroSoundsEnabled);
+
+          const timeline = metroSimulation.getCurrentTime();
+          metroSoundEvents.forEach((event) => {
+            event.previousPhase = ((timeline - event.begin) % event.duration + event.duration) % event.duration;
+          });
+        }
+
+        async function primeMetroAudio() {
+          if (!metroSoundsEnabled) return;
+          try {
+            await ensureMetroAudio();
+          } catch {
+            // The next explicit click on the sound control can retry the browser unlock.
+          }
+        }
+
+        function playMetroNote(frequency) {
+          if (!metroSoundsEnabled || !audioContext || !metroMasterGain) return;
+
+          const start = audioContext.currentTime;
+          const oscillator = audioContext.createOscillator();
+          const envelope = audioContext.createGain();
+          oscillator.type = 'sine';
+          oscillator.frequency.setValueAtTime(frequency, start);
+          envelope.gain.setValueAtTime(0.0001, start);
+          envelope.gain.exponentialRampToValueAtTime(0.065, start + 0.018);
+          envelope.gain.exponentialRampToValueAtTime(0.0001, start + 0.32);
+          oscillator.connect(envelope);
+          envelope.connect(metroMasterGain);
+          oscillator.start(start);
+          oscillator.stop(start + 0.34);
+        }
+
+        function updateMetroSounds() {
+          const timeline = metroSimulation.getCurrentTime();
+
+          metroSoundEvents.forEach((event) => {
+            const phase = ((timeline - event.begin) % event.duration + event.duration) % event.duration;
+            if (event.previousPhase !== null) {
+              const wrapped = phase < event.previousPhase;
+              const reachedFarTerminus = event.pingPong
+                && !wrapped
+                && event.previousPhase < event.duration / 2
+                && phase >= event.duration / 2;
+              const reachedHomeTerminus = wrapped;
+              const reachedExtraStop = !wrapped && event.extraStopPhases.some((stopPhase) => {
+                const stopTime = stopPhase * event.duration;
+                return event.previousPhase < stopTime && phase >= stopTime;
+              });
+
+              if (activePageIndex === 2 && (reachedFarTerminus || reachedHomeTerminus || reachedExtraStop)) {
+                playMetroNote(event.frequency);
+              }
+            }
+            event.previousPhase = phase;
+          });
+        }
+
+        function randomGrid(size, density) {
+          const next = new Uint8Array(size);
+          for (let index = 0; index < size; index += 1) {
+            next[index] = Math.random() * 100 < density ? 1 : 0;
+          }
+          return next;
+        }
+
+        function initializeCellMetadata() {
+          ages = new Uint16Array(grid.length);
+          tileKinds = new Uint8Array(grid.length);
+          intentionalKinds = new Uint8Array(grid.length);
+          cursorFadeLevels = new Uint8Array(grid.length);
+          decayLevels = new Uint8Array(grid.length);
+          decayTileKinds = new Uint8Array(grid.length);
+          decayOpacities = new Uint8Array(grid.length);
+          population = 0;
+
+          for (let index = 0; index < grid.length; index += 1) {
+            if (!grid[index]) continue;
+            ages[index] = 1;
+            tileKinds[index] = Math.floor(Math.random() * TILE_COUNT);
+            population += 1;
+          }
+        }
+
+        function buildNeighborMaps(source) {
+          const counts = new Uint8Array(source.length);
+          const orthogonalCounts = new Uint8Array(source.length);
+          const masks = new Uint8Array(source.length);
+
+          for (let index = 0; index < source.length; index += 1) {
+            if (!source[index]) continue;
+            const column = index % columns;
+            const row = (index - column) / columns;
+
+            for (let y = -1; y <= 1; y += 1) {
+              for (let x = -1; x <= 1; x += 1) {
+                if (x === 0 && y === 0) continue;
+                let neighborColumn = column + x;
+                let neighborRow = row + y;
+
+                if (SETTINGS.wrap) {
+                  neighborColumn = (neighborColumn + columns) % columns;
+                  neighborRow = (neighborRow + rows) % rows;
+                } else if (
+                  neighborColumn < 0 || neighborColumn >= columns ||
+                  neighborRow < 0 || neighborRow >= rows
+                ) {
+                  continue;
+                }
+
+                const neighborIndex = neighborRow * columns + neighborColumn;
+                counts[neighborIndex] += 1;
+                if (x === 0 || y === 0) orthogonalCounts[neighborIndex] += 1;
+
+                if (x === 0 && y === 1) masks[neighborIndex] |= 1;
+                else if (x === -1 && y === 0) masks[neighborIndex] |= 2;
+                else if (x === 0 && y === -1) masks[neighborIndex] |= 4;
+                else if (x === 1 && y === 0) masks[neighborIndex] |= 8;
+                else if (x === 1 && y === 1) masks[neighborIndex] |= 16;
+                else if (x === -1 && y === 1) masks[neighborIndex] |= 32;
+                else if (x === -1 && y === -1) masks[neighborIndex] |= 64;
+                else if (x === 1 && y === -1) masks[neighborIndex] |= 128;
+              }
+            }
+          }
+
+          return { counts, orthogonalCounts, masks };
+        }
+
+        function bitCount(value) {
+          let count = 0;
+          while (value) {
+            value &= value - 1;
+            count += 1;
+          }
+          return count;
+        }
+
+        function rebuildIntentionalKinds() {
+          const { counts, orthogonalCounts, masks } = buildNeighborMaps(grid);
+          intentionalKinds = new Uint8Array(grid.length);
+
+          const N = 1;
+          const E = 2;
+          const S = 4;
+          const W = 8;
+          const NW = 16;
+          const NE = 32;
+          const SE = 64;
+          const SW = 128;
+          const ALL_CARDINAL = N | E | S | W;
+          const ALL_DIAGONAL = NW | NE | SE | SW;
+
+          for (let index = 0; index < grid.length; index += 1) {
+            if (!grid[index]) continue;
+            const mask = masks[index];
+            const cardinal = mask & ALL_CARDINAL;
+            const diagonal = mask & ALL_DIAGONAL;
+
+            if (ages[index] === 1) intentionalKinds[index] = 1;
+            else if (ages[index] === 2) intentionalKinds[index] = 12;
+            else if (counts[index] >= 7) intentionalKinds[index] = 2;
+            else if (cardinal === ALL_CARDINAL) intentionalKinds[index] = 5;
+            else if (cardinal === (E | W)) intentionalKinds[index] = 10;
+            else if (cardinal === (N | S)) intentionalKinds[index] = 11;
+            else if (diagonal === ALL_DIAGONAL) intentionalKinds[index] = 0;
+            else if (diagonal === (NW | SE)) intentionalKinds[index] = 4;
+            else if (diagonal === (NE | SW)) intentionalKinds[index] = 3;
+            else if (counts[index] >= 5 && !(mask & NW) && !(mask & SE)) intentionalKinds[index] = 6;
+            else if (counts[index] >= 5 && !(mask & NE) && !(mask & SW)) intentionalKinds[index] = 7;
+            else {
+              const horizontalBand = bitCount(mask & (NW | N | NE | SW | S | SE));
+              const verticalBand = bitCount(mask & (NW | W | SW | NE | E | SE));
+              if (horizontalBand >= 4 && horizontalBand > verticalBand) intentionalKinds[index] = 8;
+              else if (verticalBand >= 4 && verticalBand > horizontalBand) intentionalKinds[index] = 9;
+              else if (orthogonalCounts[index] === 0) intentionalKinds[index] = 0;
+              else intentionalKinds[index] = 5;
+            }
+          }
+        }
+
+        function rebuildTileCache() {
+          const inset = SETTINGS.gaps ? 1 : 0;
+          const size = Math.max(1, SETTINGS.cellSize - inset);
+
+          tileCache = tileImages.map((image) => {
+            if (!image.complete || !image.naturalWidth) return null;
+            const cached = document.createElement('canvas');
+            cached.width = size;
+            cached.height = size;
+            const cachedContext = cached.getContext('2d');
+            cachedContext.imageSmoothingEnabled = false;
+            cachedContext.drawImage(image, 0, 0, size, size);
+            cachedContext.globalCompositeOperation = 'source-in';
+            cachedContext.fillStyle = '#ffffff';
+            cachedContext.fillRect(0, 0, size, size);
+            return cached;
+          });
+        }
+
+        function getLiveOpacity(index) {
+          const fade = cursorFadeLevels[index] / SETTINGS.cursorFadeSteps;
+          return SETTINGS.opacity + (SETTINGS.cursorOpacity - SETTINGS.opacity) * fade;
+        }
+
+        function draw() {
+          const dpr = window.devicePixelRatio || 1;
+          const inset = SETTINGS.gaps ? 1 : 0;
+          context.setTransform(dpr, 0, 0, dpr, 0, 0);
+          context.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+          context.imageSmoothingEnabled = false;
+          context.globalAlpha = 1;
+          let activeAlpha = 1;
+
+          for (let index = 0; index < grid.length; index += 1) {
+            const decayLevel = decayLevels[index];
+            if (!grid[index] && !decayLevel) continue;
+
+            const cellAlpha = grid[index]
+              ? getLiveOpacity(index) / 100
+              : (decayOpacities[index] / 100) * Math.min(1, decayLevel / SETTINGS.decaySteps);
+            if (cellAlpha !== activeAlpha) {
+              context.globalAlpha = cellAlpha;
+              activeAlpha = cellAlpha;
+            }
+
+            const column = index % columns;
+            const row = (index - column) / columns;
+            const x = column * SETTINGS.cellSize + inset;
+            const y = row * SETTINGS.cellSize + inset;
+            const tileIndex = grid[index]
+              ? intentionalKinds[index]
+              : decayTileKinds[index];
+            const tile = tileCache[tileIndex];
+            if (tile) context.drawImage(tile, x, y);
+          }
+
+          context.globalAlpha = 1;
+        }
+
+        function resizeGrid() {
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width = Math.floor(window.innerWidth * dpr);
+          canvas.height = Math.floor(window.innerHeight * dpr);
+          canvas.style.width = `${window.innerWidth}px`;
+          canvas.style.height = `${window.innerHeight}px`;
+          columns = Math.ceil(window.innerWidth / SETTINGS.cellSize);
+          rows = Math.ceil(window.innerHeight / SETTINGS.cellSize);
+          grid = randomGrid(columns * rows, SETTINGS.density);
+          initializeCellMetadata();
+          rebuildTileCache();
+          rebuildIntentionalKinds();
+          lastPointerCell = null;
+          draw();
+        }
+
+        function nextGeneration() {
+          if (!grid.length) return;
+          const next = new Uint8Array(grid.length);
+          const nextAges = new Uint16Array(grid.length);
+          const nextTileKinds = new Uint8Array(grid.length);
+          const nextCursorFadeLevels = new Uint8Array(grid.length);
+          const nextDecayLevels = new Uint8Array(grid.length);
+          const nextDecayTileKinds = new Uint8Array(grid.length);
+          const nextDecayOpacities = new Uint8Array(grid.length);
+          const { counts } = buildNeighborMaps(grid);
+          let nextPopulation = 0;
+
+          for (let index = 0; index < grid.length; index += 1) {
+            const neighbors = counts[index];
+            if (neighbors === 3 || (grid[index] && neighbors === 2)) {
+              next[index] = 1;
+              nextAges[index] = grid[index] ? Math.min(65535, ages[index] + 1) : 1;
+              nextTileKinds[index] = grid[index]
+                ? tileKinds[index]
+                : Math.floor(Math.random() * TILE_COUNT);
+              nextCursorFadeLevels[index] = grid[index]
+                ? Math.max(0, cursorFadeLevels[index] - 1)
+                : 0;
+              nextPopulation += 1;
+            } else if (grid[index]) {
+              nextDecayLevels[index] = SETTINGS.decaySteps;
+              nextDecayTileKinds[index] = intentionalKinds[index];
+              nextDecayOpacities[index] = Math.round(getLiveOpacity(index));
+            } else if (decayLevels[index] > 1) {
+              nextDecayLevels[index] = decayLevels[index] - 1;
+              nextDecayTileKinds[index] = decayTileKinds[index];
+              nextDecayOpacities[index] = decayOpacities[index];
+            }
+          }
+
+          grid = next;
+          ages = nextAges;
+          tileKinds = nextTileKinds;
+          cursorFadeLevels = nextCursorFadeLevels;
+          decayLevels = nextDecayLevels;
+          decayTileKinds = nextDecayTileKinds;
+          decayOpacities = nextDecayOpacities;
+          population = nextPopulation;
+          rebuildIntentionalKinds();
+          draw();
+        }
+
+        function activateCell(column, row) {
+          if (column < 0 || column >= columns || row < 0 || row >= rows) return;
+          const index = row * columns + column;
+          if (grid[index]) return;
+
+          grid[index] = 1;
+          ages[index] = 1;
+          tileKinds[index] = Math.floor(Math.random() * TILE_COUNT);
+          cursorFadeLevels[index] = SETTINGS.cursorFadeSteps;
+          decayLevels[index] = 0;
+          decayTileKinds[index] = 0;
+          decayOpacities[index] = 0;
+          population += 1;
+          pointerDirty = true;
+        }
+
+        function drawCellLine(from, to) {
+          let x = from.column;
+          let y = from.row;
+          const dx = Math.abs(to.column - x);
+          const sx = x < to.column ? 1 : -1;
+          const dy = -Math.abs(to.row - y);
+          const sy = y < to.row ? 1 : -1;
+          let error = dx + dy;
+
+          while (true) {
+            activateCell(x, y);
+            if (x === to.column && y === to.row) break;
+            const twiceError = 2 * error;
+            if (twiceError >= dy) {
+              error += dy;
+              x += sx;
+            }
+            if (twiceError <= dx) {
+              error += dx;
+              y += sy;
+            }
+          }
+        }
+
+        function addCellsFromPointer(event) {
+          const coalescedPoints = typeof event.getCoalescedEvents === 'function'
+            ? event.getCoalescedEvents()
+            : [];
+          const points = coalescedPoints.length ? coalescedPoints : [event];
+
+          for (const point of points) {
+            const cell = {
+              column: Math.floor(point.clientX / SETTINGS.cellSize),
+              row: Math.floor(point.clientY / SETTINGS.cellSize),
+            };
+            if (lastPointerCell) drawCellLine(lastPointerCell, cell);
+            else activateCell(cell.column, cell.row);
+            lastPointerCell = cell;
+          }
+        }
+
+        function syncHomeNavigation() {
+          const contentBottom = homeContent.offsetTop + homeIdentity.offsetHeight;
+          const bottomSpace = Math.max(24, window.innerHeight - contentBottom);
+          siteShell.style.setProperty('--home-nav-bottom', `${bottomSpace}px`);
+        }
+
+        function setPage(nextIndex, force = false) {
+          const clampedIndex = Math.max(-1, Math.min(pages.length - 1, nextIndex));
+          if (!force && (clampedIndex === activePageIndex || transitionLocked)) return;
+
+          activePageIndex = clampedIndex;
+          pages.forEach((page, index) => {
+            page.classList.toggle('is-active', index === activePageIndex);
+            page.classList.toggle('is-above', index < activePageIndex);
+            page.classList.toggle('is-below', index > activePageIndex);
+            page.setAttribute('aria-hidden', index === activePageIndex ? 'false' : 'true');
+          });
+
+          siteShell.classList.toggle('is-inner', activePageIndex > 0);
+          siteShell.classList.toggle('is-background-only', activePageIndex === -1);
+          portfolioGallery.contentWindow?.postMessage({
+            type: 'gallery:visibility',
+            visible: activePageIndex === 3,
+          }, window.location.origin);
+          navLabels.forEach((label) => {
+            const isCurrent = Number(label.dataset.targetPage) === activePageIndex;
+            label.classList.toggle('is-current', isCurrent);
+            if (isCurrent) label.setAttribute('aria-current', 'page');
+            else label.removeAttribute('aria-current');
+          });
+
+          if (force) return;
+          transitionLocked = true;
+          window.clearTimeout(transitionTimer);
+          transitionTimer = window.setTimeout(() => {
+            transitionLocked = false;
+          }, 1100);
+        }
+
+        function canScrollElement(target, deltaY) {
+          const scrollable = target instanceof Element
+            ? target.closest('.about-story-card, .about-grid')
+            : null;
+          if (!scrollable || scrollable.scrollHeight <= scrollable.clientHeight + 1) return false;
+          const overflowY = window.getComputedStyle(scrollable).overflowY;
+          if (overflowY !== 'auto' && overflowY !== 'scroll') return false;
+          const maximum = scrollable.scrollHeight - scrollable.clientHeight;
+          return deltaY > 0
+            ? scrollable.scrollTop < maximum - 1
+            : scrollable.scrollTop > 1;
+        }
+
+        navLabels.forEach((label) => {
+          label.addEventListener('click', () => {
+            setPage(Number(label.dataset.targetPage));
+          });
+        });
+
+        window.addEventListener('message', (event) => {
+          if (event.source !== portfolioGallery.contentWindow) return;
+          if (event.data?.type === 'gallery:entered') {
+            portfolioGalleryShell.classList.add('is-expanded');
+            siteShell.classList.add('is-gallery-open');
+          } else if (event.data?.type === 'gallery:exited') {
+            portfolioGalleryShell.classList.remove('is-expanded');
+            siteShell.classList.remove('is-gallery-open');
+          }
+        });
+
+        portfolioGallery.addEventListener('load', () => {
+          portfolioGallery.contentWindow?.postMessage({
+            type: 'gallery:visibility',
+            visible: activePageIndex === 3,
+          }, window.location.origin);
+        });
+
+        metroSoundToggle.addEventListener('click', toggleMetroSounds);
+        window.addEventListener('pointerdown', primeMetroAudio, { once: true, capture: true });
+        window.addEventListener('keydown', primeMetroAudio, { once: true, capture: true });
+
+        window.addEventListener('wheel', (event) => {
+          if (event.ctrlKey || canScrollElement(event.target, event.deltaY)) return;
+          event.preventDefault();
+          if (transitionLocked) return;
+
+          wheelAccumulator += event.deltaY;
+          window.clearTimeout(wheelResetTimer);
+          wheelResetTimer = window.setTimeout(() => { wheelAccumulator = 0; }, 180);
+          if (Math.abs(wheelAccumulator) < 55) return;
+
+          const direction = wheelAccumulator > 0 ? 1 : -1;
+          wheelAccumulator = 0;
+          setPage(activePageIndex + direction);
+        }, { passive: false });
+
+        window.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowDown' || event.key === 'PageDown') {
+            event.preventDefault();
+            setPage(activePageIndex + 1);
+          } else if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+            event.preventDefault();
+            setPage(activePageIndex - 1);
+          } else if (event.key === 'Home') {
+            event.preventDefault();
+            setPage(0);
+          } else if (event.key === 'End') {
+            event.preventDefault();
+            setPage(pages.length - 1);
+          }
+        });
+
+        window.addEventListener('pointerdown', (event) => {
+          if (event.pointerType === 'touch') touchStartY = event.clientY;
+        });
+        window.addEventListener('pointerup', (event) => {
+          if (event.pointerType !== 'touch' || touchStartY === null) return;
+          const distance = touchStartY - event.clientY;
+          touchStartY = null;
+          if (Math.abs(distance) >= 60) setPage(activePageIndex + (distance > 0 ? 1 : -1));
+        });
+
+        window.addEventListener('pointermove', addCellsFromPointer, { passive: true });
+        window.addEventListener('pointerout', (event) => {
+          if (!event.relatedTarget) lastPointerCell = null;
+        });
+        window.addEventListener('pointercancel', () => { lastPointerCell = null; });
+        window.addEventListener('resize', () => {
+          resizeGrid();
+          syncHomeNavigation();
+        });
+
+        function animate(time) {
+          updateMetroSounds();
+          if (time - lastTick >= 1000 / SETTINGS.speed) {
+            nextGeneration();
+            lastTick = time;
+            pointerDirty = false;
+          } else if (pointerDirty) {
+            rebuildIntentionalKinds();
+            draw();
+            pointerDirty = false;
+          }
+          requestAnimationFrame(animate);
+        }
+
+        setMetroSoundButtonState(metroSoundsEnabled);
+        setPage(0, true);
+        resizeGrid();
+        syncHomeNavigation();
+        if (document.fonts?.ready) document.fonts.ready.then(syncHomeNavigation);
+        requestAnimationFrame(animate);
+      })();
+    </script>
+  </body>
+</html>

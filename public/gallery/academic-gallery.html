@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Gallery</title>
+  <link rel="stylesheet" href="academic-gallery.css?v=20260608d">
+</head>
+<body>
+  <main class="gallery-app">
+    <canvas id="gallery-webgl" class="gallery-webgl" aria-hidden="true"></canvas>
+    <canvas
+      id="gallery-canvas"
+      class="gallery-canvas"
+      aria-label="First-person view inside the academic gallery"
+    ></canvas>
+
+    <div class="gallery-overlay">
+      <section class="gallery-panel gallery-intro" aria-label="Gallery controls">
+        <h1>Welcome to the Academic Gallery.</h1>
+        <div class="gallery-copy" aria-label="Gallery introduction and controls">
+          <p>You are standing in a 3D museum room.</p>
+          <p>Move around to explore some of my recent projects.</p>
+          <p class="gallery-copy-spacer" aria-hidden="true"></p>
+          <p class="gallery-controls-heading">Controls</p>
+          <p>Move: W / A / S / D or arrow keys</p>
+          <p>Look around: Mouse / touchpad</p>
+          <p>Return: Esc key</p>
+        </div>
+        <div class="gallery-actions">
+          <button id="lock-button" class="gallery-button" type="button">Enter Gallery</button>
+        </div>
+      </section>
+
+      <section class="gallery-panel gallery-status" aria-label="Exit hint">
+        <p id="lock-status">Press Escape to leave</p>
+      </section>
+    </div>
+
+    <div class="gallery-crosshair" aria-hidden="true"></div>
+  </main>
+
+  <script src="bench-model-data.js?v=20260327a"></script>
+  <script src="academic-gallery.js?v=20260608k"></script>
+</body>
+</html>
