@@ -1,5 +1,12 @@
-import { GameOfLife } from '@/components/game-of-life';
-
 export default function Home() {
-  return <GameOfLife />;
+  return (
+    <main className="site-frame-shell">
+      <iframe
+        className="site-frame"
+        src="/site.html"
+        title="Liam Cunningham portfolio"
+        allow="autoplay; fullscreen; pointer-lock"
+      />
+    </main>
+  );
 }

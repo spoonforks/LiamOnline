@@ -1,0 +1,275 @@
+:root {
+  color-scheme: dark;
+  --ink: #ffffff;
+  --ink-muted: rgba(255, 255, 255, 0.68);
+  --line: rgba(255, 255, 255, 0.14);
+  --accent: #ffffff;
+}
+
+@font-face {
+  font-family: "League Spartan";
+  src: url("../fonts/league-spartan-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  cursor: url("customCursor/p3-medium.cur"), auto;
+}
+
+a,
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+label[for],
+summary,
+select {
+  cursor: url("customCursor/p1-medium.cur"), pointer;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: #43424a;
+}
+
+body {
+  overflow: hidden;
+  font-family: "League Spartan", sans-serif;
+  color: var(--ink);
+}
+
+.gallery-app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: url("customCursor/p3-medium.cur"), auto;
+}
+
+.gallery-webgl,
+.gallery-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.gallery-webgl {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #43424a;
+}
+
+.gallery-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gallery-panel {
+  position: absolute;
+  max-width: min(40rem, calc(100vw - 2rem));
+  padding: 1.45rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: rgba(67, 66, 74, 0.88);
+  backdrop-filter: blur(18px) saturate(115%);
+  box-shadow: 0 22px 60px rgba(17, 16, 20, 0.34);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.gallery-intro {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.gallery-status {
+  right: 1.2rem;
+  bottom: 1.2rem;
+  max-width: none;
+  padding: 0.72rem 1rem;
+  text-align: center;
+}
+
+.gallery-intro h1 {
+  margin: 0;
+  font-family: "League Spartan", sans-serif;
+  font-size: clamp(1.8rem, 4.3vw, 2.85rem);
+  line-height: 1.02;
+  font-weight: 430;
+  letter-spacing: -0.035em;
+}
+
+.gallery-copy,
+.gallery-status p {
+  font-size: 0.97rem;
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+
+.gallery-status p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.gallery-copy {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.24rem;
+  justify-items: center;
+}
+
+.gallery-copy p {
+  margin: 0;
+}
+
+.gallery-copy-spacer {
+  min-height: 0.9rem;
+}
+
+.gallery-controls-heading {
+  margin-top: 0.15rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.home-link {
+  position: fixed;
+  top: 0;
+  left: clamp(0.45rem, 1vw, 0.85rem);
+  z-index: 30;
+  display: block;
+  width: clamp(64px, 5vw, 82px);
+  aspect-ratio: 649 / 419;
+  border-radius: 0;
+  background-image: url("homeButton/hb1.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  text-decoration: none;
+  transition: transform 160ms ease;
+}
+
+.home-link:hover,
+.home-link:focus-visible {
+  background-image: url("homeButton/hb2.png");
+  transform: translateY(-1px);
+}
+
+.home-link:focus-visible {
+  outline: 2px solid rgba(17, 17, 17, 0.35);
+  outline-offset: 3px;
+}
+
+.gallery-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.15rem;
+  pointer-events: auto;
+}
+
+.gallery-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0;
+  font: inherit;
+  text-decoration: none;
+  transition: transform 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.gallery-button {
+  border: none;
+  background: var(--accent);
+  color: #34333a;
+}
+
+.gallery-button:hover,
+.home-link:hover {
+  transform: translateY(-1px);
+}
+
+.gallery-button:focus-visible,
+.home-link:focus-visible {
+  outline: 2px solid rgba(17, 17, 17, 0.35);
+  outline-offset: 3px;
+}
+
+.gallery-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.62);
+  pointer-events: none;
+}
+
+.gallery-crosshair::before,
+.gallery-crosshair::after {
+  content: none;
+}
+
+body.is-locked {
+  cursor: none;
+}
+
+body.is-gallery-active .gallery-intro,
+body.is-locked .gallery-intro {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, calc(-50% - 8px));
+}
+
+body.is-gallery-active .gallery-status,
+body.is-locked .gallery-status {
+  opacity: 0.82;
+}
+
+@media (max-width: 780px) {
+  .gallery-intro,
+  .gallery-status {
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
+  }
+
+  .gallery-intro {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .gallery-status {
+    bottom: 1rem;
+    text-align: left;
+  }
+
+  .gallery-actions {
+    flex-wrap: wrap;
+  }
+}

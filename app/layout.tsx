@@ -14,18 +14,18 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://game-of-life-background-lab.gavin-liam-b-3363.chatgpt.site'),
-  title: 'Game of Life — Background Lab',
-  description: 'An interactive Conway’s Game of Life background experiment.',
+  title: 'Liam Cunningham — Portfolio',
+  description: 'Portfolio of Liam Cunningham, MSc student focused on AI and metropolitan innovation.',
   openGraph: {
-    title: 'Game of Life — Background Lab',
-    description: 'An interactive Conway’s Game of Life background experiment.',
+    title: 'Liam Cunningham — Portfolio',
+    description: 'Portfolio of Liam Cunningham, MSc student focused on AI and metropolitan innovation.',
     type: 'website',
-    images: [{ url: '/og.png', width: 1792, height: 1024, alt: 'Game of Life — Background Lab' }],
+    images: [{ url: '/og.png', width: 1792, height: 1024, alt: 'Liam Cunningham portfolio' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Game of Life — Background Lab',
-    description: 'An interactive Conway’s Game of Life background experiment.',
+    title: 'Liam Cunningham — Portfolio',
+    description: 'Portfolio of Liam Cunningham, MSc student focused on AI and metropolitan innovation.',
     images: ['/og.png'],
   },
 };
