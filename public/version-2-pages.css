@@ -267,6 +267,11 @@ a {
   object-fit: contain;
 }
 
+.tool-preview .line-art-preview {
+  width: 92%;
+  height: 92%;
+}
+
 .tool-copy {
   display: flex;
   min-width: 0;
@@ -329,19 +334,6 @@ a {
 .about-detail:first-child {
   font-size: clamp(40px, min(3.12vw, 5.55vh), 60px);
   margin-bottom: min(0.65vh, 7px);
-}
-
-.about-detail::before {
-  content: '';
-  position: absolute;
-  top: 0.34em;
-  left: calc(-2vw + 1px);
-  width: 11px;
-  height: 11px;
-  background: #ffffff;
-  -webkit-mask: url('./TILES/Sprite-0007.png') center / contain no-repeat;
-  mask: url('./TILES/Sprite-0007.png') center / contain no-repeat;
-  image-rendering: pixelated;
 }
 
 .about-link {
@@ -612,9 +604,6 @@ a {
     padding-left: 1.6vw;
   }
 
-  .about-detail::before {
-    left: calc(-1.6vw + 1px);
-  }
 }
 
 @media (max-width: 900px) {
@@ -680,10 +669,6 @@ a {
   .about-detail:first-child {
     grid-column: 1 / -1;
     font-size: clamp(21px, 5.8vw, 36px);
-  }
-
-  .about-detail::before {
-    display: none;
   }
 
   .about-story-card {
