@@ -682,8 +682,6 @@
         let touchStartTarget = null;
         let audioContext = null;
         let metroMasterGain = null;
-        let metroAudioUnlockPromise = null;
-        let metroAudioPrimed = false;
         let metroSoundsEnabled = true;
         let lastMetroChimeAt = Number.NEGATIVE_INFINITY;
 
@@ -705,13 +703,12 @@
         }
 
         function playSilentMetroUnlock() {
-          if (metroAudioPrimed || !audioContext || !metroMasterGain) return;
+          if (!audioContext || !metroMasterGain) return;
           const silentBuffer = audioContext.createBuffer(1, 1, audioContext.sampleRate);
           const silentSource = audioContext.createBufferSource();
           silentSource.buffer = silentBuffer;
           silentSource.connect(metroMasterGain);
           silentSource.start();
-          metroAudioPrimed = true;
         }
 
         async function ensureMetroAudio() {
@@ -729,24 +726,25 @@
           }
 
           if (audioContext.state === 'closed') return false;
-          if (!metroAudioUnlockPromise) {
-            metroAudioUnlockPromise = (async () => {
-              if (audioContext.state !== 'running') await audioContext.resume();
-              if (audioContext.state !== 'running') return false;
-              playSilentMetroUnlock();
-              return true;
-            })().finally(() => {
-              metroAudioUnlockPromise = null;
-            });
+          if (audioContext.state === 'running') {
+            playSilentMetroUnlock();
+            return true;
           }
-          return metroAudioUnlockPromise;
+          playSilentMetroUnlock();
+          try {
+            await audioContext.resume();
+          } catch {
+            return false;
+          }
+          if (audioContext.state !== 'running') return false;
+          playSilentMetroUnlock();
+          return true;
         }
 
-        async function toggleMetroSounds() {
-          const nextState = !metroSoundsEnabled;
-          if (nextState && !(await ensureMetroAudio())) return;
-          metroSoundsEnabled = nextState;
+        function toggleMetroSounds() {
+          metroSoundsEnabled = !metroSoundsEnabled;
           setMetroSoundButtonState(metroSoundsEnabled);
+          if (metroSoundsEnabled) primeMetroAudio();
 
           const timeline = metroSimulation.getCurrentTime();
           metroSoundEvents.forEach((event) => {
@@ -1131,7 +1129,7 @@
           if (!force && (clampedIndex === activePageIndex || transitionLocked)) return;
 
           activePageIndex = clampedIndex;
-          if (activePageIndex === 2) primeMetroAudio();
+          if (activePageIndex === 2 && audioContext) primeMetroAudio();
           pages.forEach((page, index) => {
             page.classList.toggle('is-active', index === activePageIndex);
             page.classList.toggle('is-above', index < activePageIndex);
@@ -1231,10 +1229,10 @@
 
         metroSoundToggle.addEventListener('click', toggleMetroSounds);
         window.addEventListener('pointerdown', primeMetroAudio, { capture: true, passive: true });
+        window.addEventListener('click', primeMetroAudio, { capture: true });
         window.addEventListener('keydown', primeMetroAudio, { capture: true });
-        window.addEventListener('pageshow', primeMetroAudio);
         document.addEventListener('visibilitychange', () => {
-          if (!document.hidden && activePageIndex === 2) primeMetroAudio();
+          if (!document.hidden && activePageIndex === 2 && audioContext) primeMetroAudio();
         });
 
         function navigateFromWheelDelta(deltaY) {
